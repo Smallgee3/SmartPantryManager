@@ -1,5 +1,6 @@
 package com.example.smartpantrymanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements IngredientAdapter
 
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(v ->
-                Toast.makeText(this, "Add screen coming next", Toast.LENGTH_SHORT).show());
+                startActivity(new Intent(this, AddEditIngredientActivity.class)));
     }
 
     /** Reload from the database every time the screen becomes visible again. */
@@ -54,7 +55,9 @@ public class MainActivity extends AppCompatActivity implements IngredientAdapter
 
     @Override
     public void onEdit(Ingredient item) {
-        Toast.makeText(this, "Edit screen coming next: " + item.getName(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, AddEditIngredientActivity.class);
+        intent.putExtra(AddEditIngredientActivity.EXTRA_INGREDIENT_ID, item.getId());
+        startActivity(intent);
     }
 
     @Override
