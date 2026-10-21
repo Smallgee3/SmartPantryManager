@@ -24,6 +24,7 @@ public class SuggestedRecipesActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_suggested_recipes);
+        NavigationHelper.setup(this, R.id.nav_recipes);
 
         db = new DatabaseHelper(this);
         tvSubtitle = findViewById(R.id.tvSubtitle);

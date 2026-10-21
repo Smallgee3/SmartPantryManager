@@ -3,7 +3,6 @@ package com.example.smartpantrymanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,15 +20,17 @@ public class MainActivity extends AppCompatActivity implements IngredientAdapter
 
     private DatabaseHelper db;
     private IngredientAdapter adapter;
-    private TextView tvEmpty;
+    private TextView tvEmpty, tvBanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        NavigationHelper.setup(this, R.id.nav_pantry);
 
         db = new DatabaseHelper(this);
         tvEmpty = findViewById(R.id.tvEmpty);
+        tvBanner = findViewById(R.id.tvExpiringBanner);
 
         RecyclerView rvPantry = findViewById(R.id.rvPantry);
         rvPantry.setLayoutManager(new LinearLayoutManager(this));
@@ -39,10 +40,6 @@ public class MainActivity extends AppCompatActivity implements IngredientAdapter
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(v ->
                 startActivity(new Intent(this, AddEditIngredientActivity.class)));
-
-        Button btnSuggested = findViewById(R.id.btnSuggested);
-        btnSuggested.setOnClickListener(v ->
-                startActivity(new Intent(this, SuggestedRecipesActivity.class)));
     }
 
     /** Reload from the database every time the screen becomes visible again. */
@@ -53,9 +50,31 @@ public class MainActivity extends AppCompatActivity implements IngredientAdapter
     }
 
     private void loadPantry() {
+        boolean alertsOn = SettingsActivity.isExpiringAlertsEnabled(this);
+        adapter.setHighlightExpiring(alertsOn);
+
         List<Ingredient> list = db.getAllIngredients();
         adapter.setItems(list);
         tvEmpty.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
+
+        // Count items that are expired or expiring soon, for the warning banner
+        int urgent = 0;
+        if (alertsOn) {
+            for (Ingredient item : list) {
+                String expiry = item.getExpiryDate();
+                if (expiry != null && !expiry.trim().isEmpty()
+                        && ExpiryUtil.daysUntil(expiry) <= ExpiryUtil.SOON_DAYS) {
+                    urgent++;
+                }
+            }
+        }
+        if (urgent > 0) {
+            tvBanner.setText(urgent + (urgent == 1 ? " item is" : " items are")
+                    + " expired or expiring within " + ExpiryUtil.SOON_DAYS + " days");
+            tvBanner.setVisibility(View.VISIBLE);
+        } else {
+            tvBanner.setVisibility(View.GONE);
+        }
     }
 
     @Override

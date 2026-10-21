@@ -53,6 +53,14 @@ public class AddEditIngredientActivity extends AppCompatActivity {
         ArrayAdapter<String> unitAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_dropdown_item, UNITS);
         spUnit.setAdapter(unitAdapter);
+        // Pre-select the default unit chosen on the Settings screen
+        String defaultUnit = SettingsActivity.getDefaultUnit(this);
+        for (int i = 0; i < UNITS.length; i++) {
+            if (UNITS[i].equals(defaultUnit)) {
+                spUnit.setSelection(i);
+                break;
+            }
+        }
 
         // Read the Intent: if an id was passed, we are editing an existing item.
         editId = getIntent().getLongExtra(EXTRA_INGREDIENT_ID, -1);

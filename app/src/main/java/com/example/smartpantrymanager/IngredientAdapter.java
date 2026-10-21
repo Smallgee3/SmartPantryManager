@@ -1,5 +1,6 @@
 package com.example.smartpantrymanager;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,9 +27,15 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
 
     private final List<Ingredient> items = new ArrayList<>();
     private final OnItemActionListener listener;
+    private boolean highlightExpiring = true;
 
     public IngredientAdapter(OnItemActionListener listener) {
         this.listener = listener;
+    }
+
+    /** Turns the expiring-soon highlighting on or off (controlled by the Settings screen). */
+    public void setHighlightExpiring(boolean highlightExpiring) {
+        this.highlightExpiring = highlightExpiring;
     }
 
     /** Replaces the displayed data and refreshes the list. */
@@ -55,7 +62,23 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
 
         String expiry = item.getExpiryDate();
         if (expiry != null && !expiry.trim().isEmpty()) {
-            holder.tvExpiry.setText("Expires: " + expiry);
+            String label = "Expires: " + expiry;
+            int color = holder.defaultExpiryColor;
+
+            if (highlightExpiring) {
+                long days = ExpiryUtil.daysUntil(expiry);
+                if (days < 0 && days != Long.MAX_VALUE) {
+                    label = "Expired: " + expiry;
+                    color = Color.parseColor("#C62828");
+                } else if (days <= ExpiryUtil.SOON_DAYS) {
+                    String when = days == 0 ? "today" : "in " + days + (days == 1 ? " day" : " days");
+                    label = "Expiring soon (" + when + "): " + expiry;
+                    color = Color.parseColor("#E65100");
+                }
+            }
+
+            holder.tvExpiry.setText(label);
+            holder.tvExpiry.setTextColor(color);
             holder.tvExpiry.setVisibility(View.VISIBLE);
         } else {
             holder.tvExpiry.setVisibility(View.GONE);
@@ -83,6 +106,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
         final View rowContainer;
         final TextView tvName, tvQuantity, tvExpiry;
         final ImageButton btnDelete;
+        final int defaultExpiryColor;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -91,6 +115,7 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
             tvQuantity = itemView.findViewById(R.id.tvQuantity);
             tvExpiry = itemView.findViewById(R.id.tvExpiry);
             btnDelete = itemView.findViewById(R.id.btnDelete);
+            defaultExpiryColor = tvExpiry.getCurrentTextColor();
         }
     }
 }
