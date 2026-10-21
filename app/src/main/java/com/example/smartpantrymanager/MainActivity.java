@@ -3,6 +3,7 @@ package com.example.smartpantrymanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,10 @@ public class MainActivity extends AppCompatActivity implements IngredientAdapter
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(v ->
                 startActivity(new Intent(this, AddEditIngredientActivity.class)));
+
+        Button btnSuggested = findViewById(R.id.btnSuggested);
+        btnSuggested.setOnClickListener(v ->
+                startActivity(new Intent(this, SuggestedRecipesActivity.class)));
     }
 
     /** Reload from the database every time the screen becomes visible again. */
