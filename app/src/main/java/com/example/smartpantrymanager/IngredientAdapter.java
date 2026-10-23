@@ -84,8 +84,12 @@ public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.Vi
             holder.tvExpiry.setVisibility(View.GONE);
         }
 
+        holder.itemView.setOnClickListener(v -> listener.onEdit(item));
         holder.rowContainer.setOnClickListener(v -> listener.onEdit(item));
-        holder.btnDelete.setOnClickListener(v -> listener.onDelete(item));
+        holder.btnDelete.setOnClickListener(v -> {
+            android.util.Log.d("PantryTap", "delete tapped: " + item.getName());
+            listener.onDelete(item);
+        });
     }
 
     @Override

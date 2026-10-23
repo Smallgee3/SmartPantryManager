@@ -69,6 +69,8 @@
             android:layout_height="44dp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="Delete ingredient"
+            android:clickable="true"
+            android:focusable="true"
             android:src="@drawable/ic_delete"
             app:tint="@color/status_expired" />
     </LinearLayout>
