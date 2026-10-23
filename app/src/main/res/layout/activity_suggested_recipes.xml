@@ -7,22 +7,28 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="16dp"
-        android:text="Suggested Recipes"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:background="@drawable/bg_header"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="28dp">
 
-    <TextView
-        android:id="@+id/tvSubtitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        android:paddingBottom="8dp"
-        android:textSize="14sp" />
+        <TextView
+            style="@style/HeaderTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Suggested Recipes" />
+
+        <TextView
+            android:id="@+id/tvSubtitle"
+            style="@style/HeaderSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp" />
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -32,15 +38,22 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRecipes"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="10dp"
+            android:paddingBottom="12dp" />
 
         <TextView
             android:id="@+id/tvEmpty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:drawableTop="@drawable/ic_recipes"
+            android:drawableTint="@color/brand_primary"
+            android:drawablePadding="16dp"
             android:gravity="center"
             android:padding="32dp"
-            android:text="No recipes match your pantry yet - add more ingredients"
+            android:text="No recipes match your pantry yet.\nAdd more ingredients to unlock dishes."
+            android:textColor="@color/text_secondary"
             android:textSize="16sp"
             android:visibility="gone" />
     </FrameLayout>

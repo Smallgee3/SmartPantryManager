@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements IngredientAdapter
 
     private DatabaseHelper db;
     private IngredientAdapter adapter;
-    private TextView tvEmpty, tvBanner;
+    private TextView tvEmpty, tvBanner, tvCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +31,14 @@ public class MainActivity extends AppCompatActivity implements IngredientAdapter
         db = new DatabaseHelper(this);
         tvEmpty = findViewById(R.id.tvEmpty);
         tvBanner = findViewById(R.id.tvExpiringBanner);
+        tvCount = findViewById(R.id.tvCount);
 
         RecyclerView rvPantry = findViewById(R.id.rvPantry);
         rvPantry.setLayoutManager(new LinearLayoutManager(this));
         adapter = new IngredientAdapter(this);
         rvPantry.setAdapter(adapter);
 
-        FloatingActionButton fabAdd = findViewById(R.id.fabAdd);
+        ExtendedFloatingActionButton fabAdd = findViewById(R.id.fabAdd);
         fabAdd.setOnClickListener(v ->
                 startActivity(new Intent(this, AddEditIngredientActivity.class)));
     }
@@ -56,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements IngredientAdapter
         List<Ingredient> list = db.getAllIngredients();
         adapter.setItems(list);
         tvEmpty.setVisibility(list.isEmpty() ? View.VISIBLE : View.GONE);
+        tvCount.setText(list.isEmpty() ? "Cook with what you already have"
+                : list.size() + (list.size() == 1 ? " ingredient" : " ingredients") + " in your pantry");
 
         // Count items that are expired or expiring soon, for the warning banner
         int urgent = 0;
