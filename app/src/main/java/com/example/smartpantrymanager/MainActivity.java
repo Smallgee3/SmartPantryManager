@@ -6,11 +6,11 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.util.List;
@@ -89,11 +89,12 @@ public class MainActivity extends AppCompatActivity implements IngredientAdapter
 
     @Override
     public void onDelete(final Ingredient item) {
-        new AlertDialog.Builder(this)
+        new MaterialAlertDialogBuilder(this)
                 .setTitle("Delete ingredient")
                 .setMessage("Remove " + item.getName() + " from your pantry?")
                 .setPositiveButton("Delete", (dialog, which) -> {
-                    db.deleteIngredient(item.getId());
+                    int rows = db.deleteIngredient(item.getId());
+                    android.util.Log.d("PantryTap", "id=" + item.getId() + " rows deleted=" + rows);
                     loadPantry();
                     Toast.makeText(this, item.getName() + " deleted", Toast.LENGTH_SHORT).show();
                 })

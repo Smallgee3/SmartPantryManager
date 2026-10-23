@@ -44,3 +44,12 @@ I used **SQLite** through `SQLiteOpenHelper`. The app is entirely personal and o
 ## Scope
 
 As required by the brief, the app uses no maps, GPS or location services, and has no payment features.
+
+## Screenshots
+## Screenshots
+
+![Pantry](screenshots/pantry.png)
+![Add ingredient](screenshots/add.png)
+![Recipes](screenshots/recipes.png)
+![Recipe detail](screenshots/detail.png)
+![Settings](screenshots/settings.png)
